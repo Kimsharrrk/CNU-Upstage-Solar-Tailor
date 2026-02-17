@@ -35,7 +35,7 @@
 | :--- | :--- |
 | **AI Engine** | Upstage SOLAR PRO, Document Parse, OCR |
 | **Automation** | n8n |
-| **Interface** | Discord, Zoom, Upstage LMS |
+| **Interface** | Discord |
 | **Integrations** | Notion, GitHub, Google Calendar, Google Tasks |
 
 ---

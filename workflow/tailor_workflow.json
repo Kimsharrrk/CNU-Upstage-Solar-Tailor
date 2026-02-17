@@ -1,0 +1,1681 @@
+{
+  "name": "AI 기반 자료 분류 및 중요 정보 하이라이트 + 일정/자원 통합 대시보드",
+  "nodes": [
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "guildId",
+              "value": "your_guild_id"
+            },
+            {
+              "name": "guildName",
+              "value": "your_guild_name"
+            },
+            {
+              "name": "channelId",
+              "value": "your_channel_id"
+            },
+            {
+              "name": "channelName",
+              "value": "your_channel_name"
+            },
+            {
+              "name": "email",
+              "value": "your_email@gmail.com"
+            },
+            {
+              "name": "githubUsername",
+              "value": "your_github_username"
+            },
+            {
+              "name": "repoName",
+              "value": "your_repo_name"
+            },
+            {
+              "name": "notionDatabaseId",
+              "value": "your_notion_database_id"
+            },
+            {
+              "name": "googleTaskListId",
+              "value": "your_google_tasks_list_id"
+            },
+            {
+              "name": "discordCredsId",
+              "value": "your_discord_creds_id"
+            },
+            {
+              "name": "googleCalendarCredsId",
+              "value": "your_google_calendar_creds_id"
+            },
+            {
+              "name": "googleTasksCredsId",
+              "value": "your_google_tasks_creds_id"
+            },
+            {
+              "name": "notionCredsId",
+              "value": "your_notion_creds_id"
+            },
+            {
+              "name": "upstageCredsId",
+              "value": "your_upstage_creds_id"
+            },
+            {
+              "name": "githubCredsId",
+              "value": "your_github_creds_id"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "config-node-id",
+      "name": "Workflow Configuration",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        -850,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "id": "80d30b6e-aa84-4a3f-a0ce-0522c0fabbb5",
+      "name": "Every 1 Minute",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "getAll",
+        "guildId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.guildId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.guildName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.channelId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.channelName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}/{{ $('Workflow Configuration').item.json.channelId }}"
+        },
+        "limit": 1,
+        "options": {}
+      },
+      "id": "aba97f69-e2c5-4934-839e-f448c80457a4",
+      "name": "Get Last Message",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        -512,
+        -32
+      ],
+      "webhookId": "your_webhook_id_1",
+      "credentials": {
+        "discordBotApi": {
+          "id": "={{ $('Workflow Configuration').item.json.discordCredsId }}",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "react",
+        "guildId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.guildId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.guildName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.channelId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.channelName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}/{{ $('Workflow Configuration').item.json.channelId }}"
+        },
+        "messageId": "={{ $('Get Last Message').item.json.id }}",
+        "emoji": "🗓️"
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        2464,
+        -544
+      ],
+      "id": "a0c11014-a014-4d87-bfe2-7bcdb0dd9855",
+      "name": "go to Schedule",
+      "webhookId": "your_webhook_id_2",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "credentials": {
+        "discordBotApi": {
+          "id": "={{ $('Workflow Configuration').item.json.discordCredsId }}",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "react",
+        "guildId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.guildId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.guildName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.channelId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.channelName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}/{{ $('Workflow Configuration').item.json.channelId }}"
+        },
+        "messageId": "={{ $('Get Last Message').item.json.id }}",
+        "emoji": "📝"
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        2464,
+        -208
+      ],
+      "id": "0d4b9d20-9392-46f9-8825-bad3c6bf9d76",
+      "name": "go to Assignment",
+      "webhookId": "your_webhook_id_2",
+      "credentials": {
+        "discordBotApi": {
+          "id": "={{ $('Workflow Configuration').item.json.discordCredsId }}",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const message = $('Get Last Message').item.json;\n\nreturn {\n  content: message.content || '',\n  isFile: false\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        816,
+        -192
+      ],
+      "id": "47bf3cea-338b-4305-b381-2362babf1833",
+      "name": "Upstage Doc Parse Code"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "react",
+        "guildId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.guildId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.guildName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.channelId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.channelName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}/{{ $('Workflow Configuration').item.json.channelId }}"
+        },
+        "messageId": "={{ $('Get Last Message').item.json.id }}",
+        "emoji": "📚"
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        2464,
+        -368
+      ],
+      "id": "03055b57-47bf-4bf0-84cb-b7011889bd8c",
+      "name": "go to study",
+      "webhookId": "your_webhook_id_2",
+      "credentials": {
+        "discordBotApi": {
+          "id": "={{ $('Workflow Configuration').item.json.discordCredsId }}",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1.5
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2304,
+        -208
+      ],
+      "id": "80532798-b07e-475c-b87c-c77b33504820",
+      "name": "Wait1",
+      "webhookId": "your_webhook_id_3"
+    },
+    {
+      "parameters": {
+        "amount": 1.5
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2304,
+        -352
+      ],
+      "id": "63f66e3e-3e63-44f8-94e6-f311ff17d7d9",
+      "name": "Wait",
+      "webhookId": "your_webhook_id_3"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.email }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.email }}"
+        },
+        "start": "={{ DateTime.fromISO($('Route by Category').item.json.data.date + 'T' + ($('Route by Category').item.json.data.time || '09:00')).toISO() }}",
+        "end": "={{ DateTime.fromISO($('Route by Category').item.json.data.date + 'T' + ($('Route by Category').item.json.data.time || '09:00')).plus({ hours: 1 }).toISO() }}",
+        "additionalFields": {
+          "description": "={{$('Route by Category').item.json.data.content }}",
+          "summary": "= {{ $('Route by Category').item.json.data.title }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        2688,
+        -624
+      ],
+      "id": "40e73318-cfb0-4246-8463-1ffea70b1fc4",
+      "name": "Create an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "={{ $('Workflow Configuration').item.json.googleCalendarCredsId }}",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1.5
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2288,
+        496
+      ],
+      "id": "c999b7d2-5421-40e6-a193-ffc9a3e60532",
+      "name": "Wait2",
+      "webhookId": "your_webhook_id_3"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "react",
+        "guildId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.guildId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.guildName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.channelId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.channelName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}/{{ $('Workflow Configuration').item.json.channelId }}"
+        },
+        "messageId": "={{ $('Get Last Message').item.json.id }}",
+        "emoji": "🫘"
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        2448,
+        496
+      ],
+      "id": "f7e99258-b047-40c0-85a8-477109f322ea",
+      "name": "for kakao",
+      "webhookId": "your_webhook_id_2",
+      "credentials": {
+        "discordBotApi": {
+          "id": "={{ $('Workflow Configuration').item.json.discordCredsId }}",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "react",
+        "guildId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.guildId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.guildName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.channelId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.channelName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}/{{ $('Workflow Configuration').item.json.channelId }}"
+        },
+        "messageId": "={{ $('Get Last Message').item.json.id }}",
+        "emoji": "🍃"
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        2464,
+        -80
+      ],
+      "id": "3fb083bb-c9c6-4167-9a19-fa507332e6ef",
+      "name": "for Blog",
+      "webhookId": "your_webhook_id_2",
+      "credentials": {
+        "discordBotApi": {
+          "id": "={{ $('Workflow Configuration').item.json.discordCredsId }}",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "react",
+        "guildId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.guildId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.guildName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.channelId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.channelName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}/{{ $('Workflow Configuration').item.json.channelId }}"
+        },
+        "messageId": "={{ $('Get Last Message').item.json.id }}",
+        "emoji": "🐈‍⬛"
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        2480,
+        80
+      ],
+      "id": "c9bac8d5-8525-44b4-99fa-7b211fb1e4b7",
+      "name": "for GitHub",
+      "webhookId": "your_webhook_id_2",
+      "credentials": {
+        "discordBotApi": {
+          "id": "={{ $('Workflow Configuration').item.json.discordCredsId }}",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "react",
+        "guildId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.guildId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.guildName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.channelId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.channelName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}/{{ $('Workflow Configuration').item.json.channelId }}"
+        },
+        "messageId": "={{ $('Get Last Message').item.json.id }}",
+        "emoji": "📸"
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        2496,
+        272
+      ],
+      "id": "80e1fd3b-0a87-4676-80a0-f492b230e75c",
+      "name": "for instagram",
+      "webhookId": "your_webhook_id_2",
+      "credentials": {
+        "discordBotApi": {
+          "id": "={{ $('Workflow Configuration').item.json.discordCredsId }}",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1.5
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2304,
+        -528
+      ],
+      "id": "87c4bb3f-961c-4510-8caa-80bf4caeb1e4",
+      "name": "Wait3",
+      "webhookId": "your_webhook_id_3"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. 입력 데이터 가져오기\nconst input = items[0].json;\n\n// 2. 내용 추출 시도 (여러 변수명 확인)\n// Upstage나 Discord 버전에 따라 변수명이 다를 수 있어 순서대로 찾습니다.\nlet rawContent = input.content || input.text || input.output || input.data || '';\n\n// 3. 🚨 핵심 수정: 만약 내용이 '덩어리(Object)'라면 글자로 강제 변환\nif (typeof rawContent === 'object') {\n  // 만약 덩어리 안에 또 'text'나 'content'가 있다면 그걸 꺼냄\n  if (rawContent.text) {\n    rawContent = rawContent.text;\n  } else if (rawContent.content) {\n    rawContent = rawContent.content;\n  } else {\n    // 그것도 아니면 덩어리 전체를 글자(String)로 변환\n    rawContent = JSON.stringify(rawContent);\n  }\n}\n\n// 4. 숫자가 들어와도 글자로 변환\nif (typeof rawContent !== 'string') {\n  rawContent = String(rawContent);\n}\n\n// 5. 날짜 계산 (기존 유지)\nconst messageTime = new Date(input.timestamp || Date.now());\nconst currentDate = messageTime.toISOString().slice(0, 10);\nconst dayOfWeek = messageTime.getDay();\nconst dayNames = ['일', '월', '화', '수', '목', '금', '토'];\nconst today = dayNames[dayOfWeek];\n\n// 6. 내용이 비어있거나 \"[object Object]\"가 그대로 남은 경우 처리\nif (!rawContent || rawContent.trim() === '' || rawContent === '{}') {\n  return {\n    json: {\n      content: '', // 빈 내용은 AI가 무시하도록\n      currentDate: currentDate,\n      today: today\n    }\n  };\n}\n\n// 7. 텍스트 정리 (불필요한 공백 제거)\nlet normalized = rawContent\n  .replace(/\\n+/g, ' ')\n  .replace(/\\s+/g, ' ')\n  .trim();\n\nreturn {\n  json: {\n    content: normalized,\n    currentDate: currentDate,\n    today: today\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        944,
+        -48
+      ],
+      "id": "b80ad045-e114-4529-80fe-2fbee9884e9b",
+      "name": "Normalize Text"
+    },
+    {
+      "parameters": {
+        "model": "solar-pro",
+        "messages": {
+          "message": [
+            {
+              "role": "system",
+              "content": "=[역할 정의]\n당신은 대화형 챗봇이 아닌, 오직 **'JSON 데이터 추출기'**입니다.\n입력된 텍스트를 분석하여, 사용자가 원하는 정보를 **올바른 JSON 형식**으로 변환하는 것이 유일한 임무입니다.\n절대 대화체(예: \"알겠습니다\", \"결과입니다\")를 출력하지 말고, 오직 JSON 문자열만 출력하세요.\n\n[현재 상황]\n오늘 날짜: {{ $now.format('yyyy-MM-dd') }} ({{ $now.format('cccc') }})\n\n[분류 규칙 - 매우 중요]\n입력된 메시지 하나에서 **여러 개의 항목**이 추출될 수 있습니다.\n예를 들어, \"내일 2시 미팅 있고, 회의록 정리해줘\"라는 메시지는 **SCHEDULE(일정)** 하나와 **STUDY(노트)** 하나, 총 2개의 항목으로 만들어야 합니다.\n\n아래 카테고리 중 적절한 것을 선택하여 분류하세요:\n1. SCHEDULE: 날짜와 시간이 명확한 일정 (예: \"내일 2시 미팅\", \"금요일 마감\"). -> Google Calendar용\n2. STUDY: 강의 노트, 회의록, 과제 상세 설명, 긴 텍스트 정리. -> Notion용\n   - 행동: 내용을 명확하게 요약하여 저장.\n3. TASK: 단순하고 실행 가능한 할 일 (예: \"우유 사기\", \"과제 제출하기\"). -> Google Tasks용\n4. BLOG: 기술 블로그, TIL, 코드 리뷰, 공부한 내용. -> GitHub Blog용\n5. REMINDER_KAKAO: 카카오톡으로 나에게 메시지/알림을 보내달라는 요청.\n   - 키워드: \"카톡\", \"보내줘\", \"알림\", \"기록\"\n\n[추출 규칙]\n1. title(제목): 내용을 대표하는 20자 이내의 간결한 제목.\n2. date(날짜): \"내일\", \"다음주 금요일\" 같은 표현을 반드시 \"YYYY-MM-DD\" 형식으로 변환. (언급이 없으면 오늘 날짜)\n3. content(내용): STUDY나 BLOG의 경우, 핵심 내용을 상세히 요약.\n4. category(카테고리): 위 분류 규칙에 있는 영문 코드를 그대로 사용할 것 (Switch 노드 연동을 위해).\n\n[출력 예시 - JSON 형식만 출력]\n{\n  \"items\": [\n    {\n      \"category\": \"SCHEDULE\",\n      \"data\": {\n        \"title\": \"김철수 교수님 면담\",\n        \"date\": \"2026-02-07\",\n        \"time\": \"09:30\",\n        \"content\": \"노트북 지참하여 과제 시연 및 설명\",\n        \"tags\": [\"면담\", \"학교\"]\n      }\n    },\n    {\n      \"category\": \"STUDY\",\n      \"data\": {\n        \"title\": \"네트워크 모니터링 봇 과제\",\n        \"date\": \"2026-02-06\",\n        \"content\": \"Python 기반 웹 서비스 가용성 모니터링 봇 구현. 1) Ping 체크(1분 간격), 2) 응답속도 로그, 3) 장애/지연 시 디스코드 알림. *제출: 내일 면담 전까지.\",\n        \"tags\": [\"과제\", \"Python\", \"네트워크\"]\n      }\n    }\n  ]\n}"
+            },
+            {
+              "content": "={{ $json.content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-upstage.lmChatUpstage",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        -144
+      ],
+      "id": "f58afd9f-e166-47de-99e5-91e676417c21",
+      "name": "Upstage Solar Chat (main)",
+      "retryOnFail": true,
+      "credentials": {
+        "upstageApi": {
+          "id": "={{ $('Workflow Configuration').item.json.upstageCredsId }}",
+          "name": "Upstage account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "outputFormats": [
+          "markdown"
+        ]
+      },
+      "type": "n8n-nodes-upstage.documentParsingUpstage",
+      "typeVersion": 1,
+      "position": [
+        656,
+        208
+      ],
+      "id": "b2994eca-a7e7-4ba7-b983-6ce8ce2baa85",
+      "name": "Upstage Document Parse",
+      "credentials": {
+        "upstageApi": {
+          "id": "={{ $('Workflow Configuration').item.json.upstageCredsId }}",
+          "name": "Upstage account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "832e4788-28b1-4c79-9e5b-1d96335f793b",
+              "leftValue": "={{ $json.attachments }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -96,
+        -48
+      ],
+      "id": "79ca5c43-20a5-4d90-9f77-77c784f5a5ed",
+      "name": "Check file"
+    },
+    {
+      "parameters": {
+        "amount": 1.5
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2304,
+        -80
+      ],
+      "id": "d0bde7d4-ccc6-4dbc-bbcb-e169c944da12",
+      "name": "Wait4",
+      "webhookId": "your_webhook_id_3"
+    },
+    {
+      "parameters": {
+        "amount": 1.5
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2288,
+        80
+      ],
+      "id": "267a1f73-30f2-44df-962b-a1c4fbb7d935",
+      "name": "Wait5",
+      "webhookId": "your_webhook_id_3"
+    },
+    {
+      "parameters": {
+        "amount": 1.5
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2288,
+        272
+      ],
+      "id": "9b0a8f99-f3a8-44bc-9b8b-b0cac390488a",
+      "name": "Wait6",
+      "webhookId": "your_webhook_id_3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = items[0].json;\n\n// content 필드에서 JSON 추출\nlet content = response.content || '';\n\n// 만약 markdown 코드블록에 감싸져 있으면 제거\ncontent = content.replace(/```json\\n?/g, '').replace(/```\\n?/g, '');\n\n// JSON 객체 찾기 (복수 시도)\nlet parsed;\n\ntry {\n  // 1차 시도: 전체 content가 JSON\n  parsed = JSON.parse(content);\n} catch {\n  try {\n    // 2차 시도: { 부터 마지막 }까지 추출\n    const match = content.match(/\\{[\\s\\S]*\\}/);\n    if (match) {\n      parsed = JSON.parse(match[0]);\n    } else {\n      throw new Error('No JSON found');\n    }\n  } catch {\n    console.log('Failed to parse:', content);\n    return {\n      json: {\n        items: []\n      }\n    };\n  }\n}\n\n// items 쪼개기\nreturn (parsed.items || []).map(item => {\n  return { json: item }\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        -112
+      ],
+      "id": "614ab70b-6ab0-4044-9e14-7de72a441fb8",
+      "name": "Parse & Split JSON"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "SCHEDULE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "62095f11-f6b3-4710-a5b8-d9703e5e674c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Calendar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "STUDY",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Study"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "TASK",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Tasks"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "BLOG",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "695fecb7-ceff-45cd-8b41-278e633652ff"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Blog"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "GITHUB_CODE",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "GitHub"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "INSTAGRAM",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Instagram"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.category }}",
+                    "rightValue": "REMINDER_KAKAO",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Kakao"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        1456,
+        -176
+      ],
+      "id": "12ad9bda-cbca-4be1-9d2d-b3c42d917b56",
+      "name": "Route by Category"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.notionDatabaseId }}",
+          "mode": "list",
+          "cachedResultName": "데이터베이스",
+          "cachedResultUrl": "https://www.notion.so/{{ $('Workflow Configuration').item.json.notionDatabaseId }}"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "제목|title",
+              "title": "={{ $('Wait').item.json.data.title }}"
+            },
+            {
+              "key": "날짜|rich_text",
+              "textContent": "={{ $('Wait').item.json.data.date }}"
+            }
+          ]
+        },
+        "blockUi": {
+          "blockValues": [
+            {
+              "textContent": "={{ $('Wait').item.json.data.content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        2704,
+        -400
+      ],
+      "id": "9e4681fc-6463-4886-b0a9-4451bbfa74cb",
+      "name": "Create a database page1",
+      "credentials": {
+        "notionApi": {
+          "id": "={{ $('Workflow Configuration').item.json.notionCredsId }}",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "task": "={{ $('Workflow Configuration').item.json.googleTaskListId }}",
+        "title": "={{ $('Wait1').item.json.data.title }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleTasks",
+      "typeVersion": 1,
+      "position": [
+        2720,
+        -208
+      ],
+      "id": "cd59f046-3630-403a-852a-f50ec5d8db3a",
+      "name": "Add to Google Tasks",
+      "credentials": {
+        "googleTasksOAuth2Api": {
+          "id": "={{ $('Workflow Configuration').item.json.googleTasksCredsId }}",
+          "name": "Google Tasks account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// 중복 실행 방지 로직\nconst staticData = getWorkflowStaticData('global');\nconst lastMsgId = staticData.lastMessageId;\nconst newMsgId = items[0].json.id;\n\n// 이전과 동일한 메시지 ID라면 실행 중단\nif (lastMsgId === newMsgId) {\n  return [];\n}\n\n// 새로운 메시지면 ID 저장 후 통과\nstaticData.lastMessageId = newMsgId;\nreturn items;"
+      },
+      "id": "fa4314ca-190a-4dd0-8d54-b6a11b9f844c",
+      "name": "Check New Message",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": {
+          "__rl": true,
+          "value": "https://github.com/{{ $('Workflow Configuration').item.json.githubUsername }}",
+          "mode": "url"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.repoName }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.repoName }}",
+          "cachedResultUrl": "https://github.com/{{ $('Workflow Configuration').item.json.githubUsername }}/{{ $('Workflow Configuration').item.json.repoName }}"
+        },
+        "filePath": "=posts/{{ $now.format('yyyy-MM-dd') }}-{{ $json.title }}.md",
+        "fileContent": "={{ $json.content }}",
+        "commitMessage": "Tailor: Auto-generated content"
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        2704,
+        16
+      ],
+      "id": "5919e62c-f32f-43c8-b952-37886bde3277",
+      "name": "Create a file",
+      "webhookId": "your_webhook_id_5",
+      "credentials": {
+        "githubApi": {
+          "id": "={{ $('Workflow Configuration').item.json.githubCredsId }}",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-upstage.documentOCRUpstage",
+      "typeVersion": 1,
+      "position": [
+        656,
+        32
+      ],
+      "id": "f5651318-3755-4190-9dda-0ac51866a6e3",
+      "name": "Upstage Document OCR",
+      "credentials": {
+        "upstageApi": {
+          "id": "={{ $('Workflow Configuration').item.json.upstageCredsId }}",
+          "name": "Upstage account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9f17c2c3-bcc6-4a4d-894e-ac93bef03a81",
+              "leftValue": "={{ $binary.data.mimeType }}",
+              "rightValue": "image",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        464,
+        144
+      ],
+      "id": "8e229a0c-6bbb-4619-8c1d-ff105c522c65",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Get Last Message').item.json.attachments[0].url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        288,
+        160
+      ],
+      "id": "859da10d-f04b-4c1c-b926-e5f809a80d5c",
+      "name": "Download File"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "sendAndWait",
+        "guildId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.guildId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.guildName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "={{ $('Workflow Configuration').item.json.channelId }}",
+          "mode": "list",
+          "cachedResultName": "={{ $('Workflow Configuration').item.json.channelName }}",
+          "cachedResultUrl": "https://discord.com/channels/{{ $('Workflow Configuration').item.json.guildId }}/{{ $('Workflow Configuration').item.json.channelId }}"
+        },
+        "message": "={{ $json.text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [
+        544,
+        -176
+      ],
+      "id": "efb8d861-f354-4bd0-a363-854855a30d66",
+      "name": "Send message and wait for response",
+      "webhookId": "your_webhook_id_4",
+      "credentials": {
+        "discordBotApi": {
+          "id": "={{ $('Workflow Configuration').item.json.discordCredsId }}",
+          "name": "Discord Bot account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "TASK",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "a7df2b38-67d7-4d44-b49e-02c6e3532c2c"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "TASK"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c38c626f-3517-49d0-b320-69d251471435",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "CHAT",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "CHAT"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        320,
+        -448
+      ],
+      "id": "30b07632-56a8-4838-8e2d-eb2b8df92351",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "model": "solar-pro2",
+        "options": {}
+      },
+      "type": "n8n-nodes-upstage.lmChatModelUpstage",
+      "typeVersion": 1,
+      "position": [
+        288,
+        -48
+      ],
+      "id": "b860cda1-9440-4e21-8cdf-de1cc5bc977b",
+      "name": "Upstage Solar Chat for Agent1",
+      "credentials": {
+        "upstageApi": {
+          "id": "={{ $('Workflow Configuration').item.json.upstageCredsId }}",
+          "name": "Upstage account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "solar-pro2",
+        "options": {}
+      },
+      "type": "n8n-nodes-upstage.lmChatModelUpstage",
+      "typeVersion": 1,
+      "position": [
+        80,
+        -304
+      ],
+      "id": "ec1473e1-29d5-4675-8360-df147416b995",
+      "name": "Upstage Solar Chat for Agent",
+      "credentials": {
+        "upstageApi": {
+          "id": "={{ $('Workflow Configuration').item.json.upstageCredsId }}",
+          "name": "Upstage account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "check-is-bot",
+              "leftValue": "={{ $json.author.bot }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -384,
+        -32
+      ],
+      "id": "47253457-6ab9-495f-86b3-e195a2a6987f",
+      "name": "Check bot1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=사용자의 입력: {{ $json.content }}\n\n위 입력을 분석해서 다음 중 하나의 단어만 출력해.\n\n1. 일정, 공부, 기록, 할 일 등 저장이 필요한 내용이면: TASK\n\n2. 인사, 잡담, 계산, 날씨 등 대화가 필요한 내용이면: CHAT",
+        "hasOutputParser": true,
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        48,
+        -448
+      ],
+      "id": "5f960b8b-755e-45be-9af8-6c94fc7ce712",
+      "name": "Check LLM"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=[역할]\n너는 친절한 비서야, 그렇다고 친구는 아니니깐 너무 친구처럼 가벼운 대화를 안했음 좋겠어.\n\n[사용자입력]\n사용자 입력 : {{ $json.content }}\n\n[핵심]\n사용자 입력을보고 답변을 잘해주는게 너의 가장 큰 임무야.",
+        "hasOutputParser": true,
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        272,
+        -176
+      ],
+      "id": "e203fb7b-d37e-44ca-bf51-0e2096359196",
+      "name": "Basic LLM Chain"
+    }
+  ],
+  "pinData": {
+    "Every 1 Minute": [
+      {
+        "json": {
+          "timestamp": "2026-02-04T20:41:09.193-05:00",
+          "Readable date": "February 4th 2026, 8:41:09 pm",
+          "Readable time": "8:41:09 pm",
+          "Day of week": "Wednesday",
+          "Year": "2026",
+          "Month": "February",
+          "Day of month": "04",
+          "Hour": "20",
+          "Minute": "41",
+          "Second": "09",
+          "Timezone": "America/New_York (UTC-05:00)"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Every 1 Minute": {
+      "main": [
+        [
+          {
+            "node": "Workflow Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Workflow Configuration": {
+      "main": [
+        [
+          {
+            "node": "Get Last Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Last Message": {
+      "main": [
+        [
+          {
+            "node": "Check bot1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "go to Schedule": {
+      "main": [
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upstage Doc Parse Code": {
+      "main": [
+        [
+          {
+            "node": "Normalize Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "go to Assignment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "go to study",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "for kakao",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "go to Schedule",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Text": {
+      "main": [
+        [
+          {
+            "node": "Upstage Solar Chat (main)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upstage Solar Chat (main)": {
+      "main": [
+        [
+          {
+            "node": "Parse & Split JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event": {
+      "main": [
+        []
+      ]
+    },
+    "Upstage Document Parse": {
+      "main": [
+        [
+          {
+            "node": "Normalize Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check file": {
+      "main": [
+        [
+          {
+            "node": "Check LLM",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait6": {
+      "main": [
+        [
+          {
+            "node": "for instagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait5": {
+      "main": [
+        [
+          {
+            "node": "for GitHub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse & Split JSON": {
+      "main": [
+        [
+          {
+            "node": "Route by Category",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Category": {
+      "main": [
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "go to study": {
+      "main": [
+        [
+          {
+            "node": "Create a database page1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "go to Assignment": {
+      "main": [
+        [
+          {
+            "node": "Add to Google Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait4": {
+      "main": [
+        [
+          {
+            "node": "for Blog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check New Message": {
+      "main": [
+        [
+          {
+            "node": "Check file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "for GitHub": {
+      "main": [
+        [
+          {
+            "node": "Create a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "for Blog": {
+      "main": [
+        [
+          {
+            "node": "Create a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upstage Document OCR": {
+      "main": [
+        [
+          {
+            "node": "Normalize Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Upstage Document OCR",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Upstage Document Parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download File": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Upstage Doc Parse Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upstage Solar Chat for Agent1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upstage Solar Chat for Agent": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Check LLM",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check bot1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Check New Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check LLM": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ef08888a-1574-4a58-ad4a-31ee7c9622aa",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "your_instance_id"
+  },
+  "id": "your_workflow_id",
+  "tags": []
+}
